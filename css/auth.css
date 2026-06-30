@@ -1,0 +1,486 @@
+/* ===================================================
+   ORIGEM BRASIL — Auth Layout (login.php + cadastro.php)
+   Split: imagem à esquerda · formulário à direita
+   =================================================== */
+
+   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+   
+   :root {
+       --green:        #1a3a1c;
+       --green-2:      #2d5a30;
+       --green-3:      #3d7a42;
+       --green-light:  #e8f5e9;
+       --orange:       #c84b2f;
+       --cream:        #faf7f2;
+       --border:       #e8e0d0;
+       --text:         #1a1208;
+       --text-2:       #3d3020;
+       --text-3:       #7a6a50;
+       --white:        #ffffff;
+       --font:         'Inter', sans-serif;
+       --font-display: 'Playfair Display', serif;
+       --radius:       12px;
+       --transition:   .2s ease;
+   }
+   
+   html, body {
+       height: 100%;
+       font-family: var(--font);
+       -webkit-font-smoothing: antialiased;
+       color: var(--text);
+   }
+   
+   /* ── LAYOUT PRINCIPAL ─────────────────────────────── */
+   body {
+       display: grid;
+       grid-template-columns: 1fr 480px;
+       min-height: 100vh;
+   }
+   
+   /* ── PAINEL ESQUERDO (imagem) ─────────────────────── */
+   .auth-visual {
+       position: relative;
+       overflow: hidden;
+       background: var(--green);
+   
+       /* Imagem de campo / natureza brasileira via Unsplash */
+       background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1200&q=80');
+       background-size: cover;
+       background-position: center;
+   }
+   
+   /* Overlay degradê sobre a imagem */
+   .auth-visual::before {
+       content: '';
+       position: absolute;
+       inset: 0;
+       background: linear-gradient(
+           160deg,
+           rgba(26, 58, 28, 0.72) 0%,
+           rgba(26, 58, 28, 0.45) 50%,
+           rgba(200, 75, 47, 0.25) 100%
+       );
+       z-index: 1;
+   }
+   
+   /* Conteúdo sobre a imagem */
+   .auth-visual-content {
+       position: relative;
+       z-index: 2;
+       height: 100%;
+       display: flex;
+       flex-direction: column;
+       justify-content: space-between;
+       padding: 48px;
+   }
+   
+   /* Logo no topo esquerdo */
+   .auth-visual-logo {
+       display: flex;
+       align-items: center;
+       gap: 12px;
+       text-decoration: none;
+   }
+   
+   .auth-visual-logo-icon {
+       width: 44px; height: 44px;
+       background: rgba(255,255,255,.15);
+       backdrop-filter: blur(8px);
+       border: 1px solid rgba(255,255,255,.25);
+       border-radius: 12px;
+       display: flex; align-items: center; justify-content: center;
+       flex-shrink: 0;
+   }
+   
+   .auth-visual-logo-icon svg {
+       width: 24px; height: 24px;
+       fill: none;
+       stroke: #fff;
+       stroke-width: 1.8;
+   }
+   
+   .auth-visual-logo-text strong {
+       display: block;
+       font-size: 16px;
+       font-weight: 700;
+       color: #fff;
+       letter-spacing: -.2px;
+   }
+   
+   .auth-visual-logo-text span {
+       display: block;
+       font-size: 10.5px;
+       font-weight: 500;
+       color: rgba(255,255,255,.65);
+       text-transform: uppercase;
+       letter-spacing: .08em;
+   }
+   
+   /* Texto de destaque no centro/baixo */
+   .auth-visual-body {
+       padding-bottom: 20px;
+   }
+   
+   .auth-visual-tag {
+       display: inline-block;
+       background: rgba(255,255,255,.12);
+       border: 1px solid rgba(255,255,255,.2);
+       backdrop-filter: blur(6px);
+       color: rgba(255,255,255,.85);
+       font-size: 11px;
+       font-weight: 600;
+       letter-spacing: .12em;
+       text-transform: uppercase;
+       padding: 5px 14px;
+       border-radius: 20px;
+       margin-bottom: 20px;
+   }
+   
+   .auth-visual-headline {
+       font-family: var(--font-display);
+       font-size: clamp(28px, 3vw, 40px);
+       font-weight: 700;
+       color: #fff;
+       line-height: 1.2;
+       letter-spacing: -.5px;
+       margin-bottom: 16px;
+   }
+   
+   .auth-visual-headline em {
+       font-style: italic;
+       color: rgba(255,255,255,.75);
+   }
+   
+   .auth-visual-desc {
+       font-size: 14px;
+       color: rgba(255,255,255,.7);
+       line-height: 1.65;
+       max-width: 340px;
+       margin-bottom: 32px;
+   }
+   
+   /* Selos / badges */
+   .auth-badges {
+       display: flex;
+       flex-wrap: wrap;
+       gap: 10px;
+   }
+   
+   .auth-badge {
+       display: flex;
+       align-items: center;
+       gap: 7px;
+       background: rgba(255,255,255,.1);
+       border: 1px solid rgba(255,255,255,.18);
+       backdrop-filter: blur(6px);
+       border-radius: 8px;
+       padding: 8px 14px;
+       color: rgba(255,255,255,.9);
+       font-size: 12px;
+       font-weight: 500;
+   }
+   
+   .auth-badge svg {
+       width: 15px; height: 15px;
+       stroke: rgba(255,255,255,.8);
+       fill: none;
+       stroke-width: 2;
+       flex-shrink: 0;
+   }
+   
+   /* ── PAINEL DIREITO (formulário) ──────────────────── */
+   .auth-form-panel {
+       background: var(--cream);
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       justify-content: center;
+       padding: 48px 52px;
+       overflow-y: auto;
+       min-height: 100vh;
+   }
+   
+   /* Card do formulário */
+   .card {
+       width: 100%;
+       max-width: 380px;
+   }
+   
+   /* ── LOGO MOBILE (aparece só em mobile) ───────────── */
+   .mobile-logo {
+       display: none;
+       text-align: center;
+       margin-bottom: 28px;
+   }
+   
+   .mobile-logo a {
+       font-family: var(--font-display);
+       font-size: 22px;
+       font-weight: 700;
+       color: var(--green);
+       text-decoration: none;
+   }
+   
+   .mobile-logo p {
+       font-size: 12px;
+       color: var(--text-3);
+       margin-top: 3px;
+   }
+   
+   /* ── CABEÇALHO DO FORMULÁRIO ──────────────────────── */
+   .form-header {
+       margin-bottom: 32px;
+   }
+   
+   .form-header h2 {
+       font-family: var(--font-display);
+       font-size: 26px;
+       font-weight: 700;
+       color: var(--green);
+       letter-spacing: -.4px;
+       margin-bottom: 6px;
+   }
+   
+   .form-header p,
+   .logo-sub {
+       font-size: 13.5px;
+       color: var(--text-3);
+       line-height: 1.5;
+       display: block;
+       margin-bottom: 0;
+   }
+   
+   /* Fallback para quando o PHP usa .logo / logo-sub diretamente */
+   a.logo {
+       font-family: var(--font-display);
+       font-size: 24px;
+       font-weight: 700;
+       color: var(--green);
+       text-decoration: none;
+       display: block;
+       margin-bottom: 4px;
+   }
+   
+   .logo-sub {
+       font-size: 12.5px;
+       color: var(--text-3);
+       margin-bottom: 28px;
+       display: block;
+   }
+   
+   h2 {
+       font-family: var(--font-display);
+       font-size: 22px;
+       font-weight: 700;
+       color: var(--green);
+       margin-bottom: 24px;
+       letter-spacing: -.3px;
+   }
+   
+   /* ── CAMPOS ───────────────────────────────────────── */
+   .field {
+       margin-bottom: 16px;
+   }
+   
+   .field label {
+       display: block;
+       font-size: 11.5px;
+       font-weight: 600;
+       color: var(--text-2);
+       margin-bottom: 7px;
+       text-transform: uppercase;
+       letter-spacing: .04em;
+   }
+   
+   .field input {
+       width: 100%;
+       padding: 11px 14px;
+       border: 1.5px solid var(--border);
+       border-radius: var(--radius);
+       font-family: var(--font);
+       font-size: 14px;
+       color: var(--text);
+       background: var(--white);
+       outline: none;
+       transition: border-color var(--transition), box-shadow var(--transition);
+   }
+   
+   .field input:focus {
+       border-color: var(--green-3);
+       box-shadow: 0 0 0 3px rgba(61,122,66,.11);
+   }
+   
+   .field input::placeholder { color: #c0b59e; }
+   
+   /* ── LINK ESQUECEU ────────────────────────────────── */
+   a.forgot {
+       display: block;
+       text-align: right;
+       font-size: 12.5px;
+       color: var(--text-3);
+       margin-top: -8px;
+       margin-bottom: 22px;
+       text-decoration: none;
+       transition: color var(--transition);
+   }
+   
+   a.forgot:hover { color: var(--green); }
+   
+   /* ── BOTÃO ────────────────────────────────────────── */
+   .btn-login {
+       width: 100%;
+       padding: 13px 20px;
+       background: var(--green);
+       color: #fff;
+       border: none;
+       border-radius: var(--radius);
+       font-family: var(--font);
+       font-size: 14.5px;
+       font-weight: 700;
+       cursor: pointer;
+       letter-spacing: .1px;
+       transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+       margin-top: 2px;
+   }
+   
+   .btn-login:hover {
+       background: var(--green-2);
+       box-shadow: 0 4px 18px rgba(26,58,28,.28);
+       transform: translateY(-1px);
+   }
+   
+   .btn-login:active { transform: translateY(0); box-shadow: none; }
+   
+   /* ── DIVIDER ──────────────────────────────────────── */
+   .divider {
+       text-align: center;
+       font-size: 12px;
+       color: var(--text-3);
+       margin: 22px 0 18px;
+       position: relative;
+       letter-spacing: .5px;
+       text-transform: uppercase;
+   }
+   
+   .divider::before,
+   .divider::after {
+       content: '';
+       position: absolute;
+       top: 50%;
+       width: 38%;
+       height: 1px;
+       background: var(--border);
+   }
+   
+   .divider::before { left: 0; }
+   .divider::after  { right: 0; }
+   
+   /* ── LINKS ────────────────────────────────────────── */
+   .link-cadastro {
+       text-align: center;
+       font-size: 13px;
+       color: var(--text-3);
+   }
+   
+   .link-cadastro a {
+       color: var(--green-2);
+       font-weight: 600;
+       text-decoration: none;
+       transition: color var(--transition);
+   }
+   
+   .link-cadastro a:hover { color: var(--orange); text-decoration: underline; }
+   
+   .link-voltar {
+       text-align: center;
+       font-size: 12px;
+       color: var(--text-3);
+       margin-top: 14px;
+   }
+   
+   .link-voltar a {
+       color: var(--text-3);
+       text-decoration: none;
+       transition: color var(--transition);
+   }
+   
+   .link-voltar a:hover { color: var(--green); }
+   
+   /* ── ALERTAS ──────────────────────────────────────── */
+   .erro-msg {
+       background: #fff5f5;
+       border: 1.5px solid #fca5a5;
+       color: #b91c1c;
+       font-size: 13px;
+       padding: 11px 14px;
+       border-radius: var(--radius);
+       margin-bottom: 18px;
+       text-align: center;
+       font-weight: 500;
+   }
+   
+   .ok-msg {
+       background: #f0fdf4;
+       border: 1.5px solid #86efac;
+       color: #166534;
+       font-size: 13px;
+       padding: 11px 14px;
+       border-radius: var(--radius);
+       margin-bottom: 18px;
+       text-align: center;
+       font-weight: 500;
+   }
+   
+   /* ── BARRA DE FORÇA DA SENHA ──────────────────────── */
+   .strength {
+       height: 4px;
+       border-radius: 99px;
+       margin-top: 8px;
+       width: 0%;
+       background: #fca5a5;
+       transition: width .35s ease, background .35s ease;
+   }
+   
+   /* ── RESPONSIVO ───────────────────────────────────── */
+   @media (max-width: 860px) {
+       body {
+           grid-template-columns: 1fr;
+           grid-template-rows: auto 1fr;
+       }
+   
+       .auth-visual {
+           height: 240px;
+           min-height: unset;
+       }
+   
+       .auth-visual-content {
+           padding: 28px 32px;
+           flex-direction: row;
+           align-items: flex-end;
+           justify-content: space-between;
+       }
+   
+       .auth-visual-body {
+           display: none;
+       }
+   
+       .auth-form-panel {
+           padding: 36px 24px;
+           min-height: unset;
+       }
+   
+       .mobile-logo {
+           display: block;
+       }
+   
+       a.logo { display: none; }
+       .logo-sub { display: none; }
+   }
+   
+   @media (max-width: 480px) {
+       .auth-visual { height: 180px; }
+       .auth-form-panel { padding: 28px 20px; }
+       .card { max-width: 100%; }
+   }
