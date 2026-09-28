@@ -110,7 +110,7 @@ $status_label = ['pendente'=>'Pendente','pago'=>'Pago','enviado'=>'Enviado','ent
 
 <!-- GREETING BANNER -->
 <div style="background:linear-gradient(110deg,var(--soil) 0%,#2C4A2E 100%);border-radius:14px;padding:24px 28px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:20px;overflow:hidden;position:relative;">
-  <div style="position:absolute;right:-30px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.03);"></div>
+  <div style="position:absolute;right:-30px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.03);pointer-events:none;"></div>
   <div>
     <div style="font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:4px;"><?php echo $data_fmt; ?></div>
     <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;"><?php echo $saudacao ?>, <?php echo htmlspecialchars($primeiro_nome); ?> 👋</div>
@@ -124,7 +124,7 @@ $status_label = ['pendente'=>'Pendente','pago'=>'Pago','enviado'=>'Enviado','ent
       <?php endif; ?>
     </div>
   </div>
-  <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap;">
+  <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap;position:relative;z-index:1;">
     <a href="produtos.php?acao=novo" style="display:inline-flex;align-items:center;gap:6px;padding:9px 16px;background:var(--clay);color:#fff;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;transition:background .15s;" onmouseover="this.style.background='#b04319'" onmouseout="this.style.background='var(--clay)'">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Produto
     </a>

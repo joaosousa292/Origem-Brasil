@@ -1,5 +1,4 @@
 <?php
-session_start();
 include("conexao.php");
 
 $nome   = htmlspecialchars(trim($_POST['nome']           ?? ''));

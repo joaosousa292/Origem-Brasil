@@ -1,5 +1,15 @@
 <?php
+$sessionPath = __DIR__ . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'sessions';
+
+if (!is_dir($sessionPath)) {
+    mkdir($sessionPath, 0777, true);
+}
+
 if (session_status() === PHP_SESSION_NONE) {
+    if (is_writable($sessionPath)) {
+        ini_set('session.save_path', $sessionPath);
+    }
+
     session_start();
 }
 

@@ -1,7 +1,7 @@
 <?php include("conexao.php");
 if (!isset($_SESSION['id'])) { header("Location: login.php?voltar=checkout.php"); exit; }
 $uid  = (int)$_SESSION['id'];
-$user = mysqli_fetch_assoc(mysqli_query($conexao,"SELECT nome,email,telefone,cpf FROM usuarios WHERE id=$uid"));
+$user = mysqli_fetch_assoc(mysqli_query($conexao,"SELECT nome,email,telefone FROM usuarios WHERE id=$uid"));
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -724,6 +724,20 @@ function validCPF(v) {
   s=0; for (let i=0;i<10;i++) s += +v[i]*(11-i);
   r=(s*10)%11; if (r===10||r===11) r=0; return r===+v[10];
 }
+function validExp(v) {
+  const m = /^(\d{2})\/(\d{2})$/.exec(v.trim());
+  if (!m) return false;
+
+  const mes = parseInt(m[1], 10);
+  const ano = 2000 + parseInt(m[2], 10);
+  if (mes < 1 || mes > 12) return false;
+
+  const agora = new Date();
+  const anoAtual = agora.getFullYear();
+  const mesAtual = agora.getMonth() + 1;
+
+  return ano > anoAtual || (ano === anoAtual && mes >= mesAtual);
+}
 
 /* ─── FINALIZAR ─── */
 async function finalizar() {
@@ -742,7 +756,7 @@ async function finalizar() {
   if (tipo === 'cartao') {
     ok = req('num-cartao', v => v.replace(/\D/g,'').length === 16) && ok;
     ok = req('nome-cartao') && ok;
-    ok = req('validade', v => /^\d{2}\/\d{2}$/.test(v)) && ok;
+    ok = req('validade', validExp) && ok;
     ok = req('cvv', v => v.replace(/\D/g,'').length >= 3) && ok;
   }
   if (!ok) { showToast('Preencha todos os campos obrigatórios.','error'); return; }

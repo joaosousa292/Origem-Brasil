@@ -471,7 +471,9 @@ input, select, textarea { font-family: var(--font); }
 
 .cart-item {
     display: flex; align-items: flex-start; gap: 14px;
-    padding: 16px 24px;
+    position: relative;
+    padding: 16px 140px 16px 24px;
+    min-height: 92px;
     border-bottom: 1px solid rgba(255,255,255,.06);
     transition: background .15s;
 }
@@ -489,9 +491,19 @@ input, select, textarea { font-family: var(--font); }
     text-overflow: ellipsis; white-space: nowrap;
 }
 .cart-item-price { font-size: 12px; color: rgba(255,255,255,.4); margin-bottom: 10px; }
-.cart-controls { display: flex; align-items: center; gap: 8px; }
+.cart-controls {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    grid-template-columns: 32px 30px 32px;
+    gap: 6px;
+    align-items: center;
+    justify-items: center;
+}
 .qty-btn {
-    width: 28px; height: 28px;
+    width: 32px; height: 32px;
     border: 1px solid rgba(255,255,255,.12);
     background: rgba(255,255,255,.06);
     border-radius: 7px; font-size: 16px;
@@ -501,11 +513,16 @@ input, select, textarea { font-family: var(--font); }
 .qty-btn:hover { background: rgba(212,98,42,.2); border-color: rgba(212,98,42,.4); color: #D4622A; }
 .qty-num { font-size: 13px; font-weight: 700; min-width: 22px; text-align: center; color: #f0e8d8; }
 .remove-btn {
-    margin-left: 4px; border: none; background: none;
-    color: rgba(255,255,255,.25); display: flex; align-items: center;
-    transition: color .15s;
+    grid-column: 1 / -1;
+    width: 100%; height: 26px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 7px;
+    background: rgba(255,255,255,.035);
+    color: rgba(255,255,255,.32);
+    display: flex; align-items: center; justify-content: center;
+    transition: color .15s, border-color .15s, background .15s;
 }
-.remove-btn:hover { color: #ef4444; }
+.remove-btn:hover { color: #ef4444; border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.08); }
 .remove-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
 
 /* Footer */
@@ -719,6 +736,9 @@ footer.site-footer {
     .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
     footer.site-footer { padding: 40px 18px 24px; }
     #cart-sidebar { width: 100%; }
+    .cart-item { padding-right: 128px; }
+    .cart-controls { right: 14px; grid-template-columns: 30px 28px 30px; }
+    .qty-btn { width: 30px; height: 30px; }
     .page-title-block { padding: 28px 18px; }
     .carousel-btn { width: 36px; height: 36px; }
     .features-inner { grid-template-columns: repeat(2,1fr); }

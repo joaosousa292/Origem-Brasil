@@ -1,10 +1,27 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) { session_start(); }
 include("conexao.php");
 if (!isset($_SESSION['id'])) { header("Location: login.php?voltar=perfil.php"); exit; }
 $uid = (int)$_SESSION['id'];
 
 $msg = '';
+function telefone_valido($telefone) {
+    $digits = preg_replace('/\D/', '', $telefone);
+
+    if ($digits === '') {
+        return true;
+    }
+
+    if (!preg_match('/^\d{10,11}$/', $digits)) {
+        return false;
+    }
+
+    if (preg_match('/^(\d)\1+$/', $digits)) {
+        return false;
+    }
+
+    return true;
+}
+
 if ($_SERVER['REQUEST_METHOD']==='POST') {
     $acao = $_POST['acao'] ?? '';
 
@@ -37,7 +54,11 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     if ($acao === 'editar_perfil') {
         $nome     = htmlspecialchars(trim($_POST['nome'] ?? ''));
         $telefone = htmlspecialchars(trim($_POST['telefone'] ?? ''));
-        if ($nome) {
+        if (!$nome) {
+            $msg = 'ERRO: Informe seu nome.';
+        } elseif (!telefone_valido($telefone)) {
+            $msg = 'ERRO: Informe um telefone vÃ¡lido com DDD.';
+        } else {
             mysqli_query($conexao,"UPDATE usuarios SET nome='".mysqli_real_escape_string($conexao,$nome)."', telefone='".mysqli_real_escape_string($conexao,$telefone)."' WHERE id=$uid");
             $_SESSION['nome'] = $nome;
             $msg = 'Perfil atualizado com sucesso!';
@@ -609,7 +630,8 @@ if ($msg) {
                             </div>
                             <div class="field">
                                 <label>Telefone / WhatsApp</label>
-                                <input type="text" name="telefone" value="<?php echo htmlspecialchars($usuario['telefone'] ?? ''); ?>" placeholder="(00) 00000-0000">
+                                <input type="text" name="telefone" value="<?php echo htmlspecialchars($usuario['telefone'] ?? ''); ?>" placeholder="(00) 00000-0000" maxlength="15" pattern="\(?[1-9]{2}\)?\s?9?\d{4}-?\d{4}">
+                                <span class="hint">Use um telefone real com DDD. SequÃªncias repetidas nÃ£o sÃ£o aceitas.</span>
                             </div>
                         </div>
                         <div class="form-grid c1">

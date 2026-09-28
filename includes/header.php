@@ -80,7 +80,7 @@ if (isset($conexao)) {
             <button class="hbtn" onclick="window.location.href='favoritos.php'" aria-label="Favoritos">
                 <?php echo icon('heart'); ?> <span>Favoritos</span>
             </button>
-            <button class="hbtn" id="open-cart" aria-label="Carrinho">
+            <button class="hbtn" id="open-cart" data-cart-toggle type="button" aria-label="Carrinho">
                 <?php echo icon('cart'); ?> <span>Carrinho</span>
                 <span class="cart-count" id="cart-count">0</span>
             </button>

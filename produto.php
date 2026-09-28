@@ -242,7 +242,7 @@ if (isset($_SESSION['id'])) {
 
         /* Card produtor */
         .produtor-card-box { background: #fff; border: 1.5px solid #E8DCC8; border-radius: 18px; overflow: hidden; }
-        .produtor-card-top { background: linear-gradient(135deg, rgba(28,51,32,.90), rgba(44,74,46,.90)),url('imagens/bg-campo2.png') center/cover; padding: 22px 20px 32px; position: relative; }
+        .produtor-card-top { background: linear-gradient(135deg, rgba(18,38,22,.96), rgba(35,69,39,.94)),url('imagens/bg-campo2.png') center/cover; padding: 22px 20px 32px; position: relative; }
         .produtor-foto-row { display: flex; align-items: center; gap: 14px; }
         .produtor-foto {
             width: 56px; height: 56px; border-radius: 50%;
@@ -253,13 +253,13 @@ if (isset($_SESSION['id'])) {
         .produtor-foto img { width: 100%; height: 100%; object-fit: cover; }
         .produtor-foto-fb { font-size: 22px; font-weight: 700; color: #fff; }
         .produtor-nome-box h3 { font-size: 15px; font-weight: 700; color: #fff; margin: 0 0 3px; }
-        .produtor-nome-box p { font-size: 11px; color: rgba(255,255,255,.6); margin: 0; }
+        .produtor-nome-box p { font-size: 11px; color: rgba(255,255,255,.82); margin: 0; }
         .produtor-chips { position: absolute; bottom: -14px; left: 20px; display: flex; gap: 6px; }
         .produtor-chip {
-            background: #fff; border: 1px solid #E8DCC8;
+            background: #fff; border: 1px solid #D6E7D9;
             border-radius: 20px; font-size: 11px; font-weight: 600;
-            color: #2C4A2E; padding: 4px 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            color: #1f3d22; padding: 4px 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,.14);
             display: inline-flex; align-items: center; gap: 5px;
         }
         .produtor-chip svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; }

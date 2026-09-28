@@ -1,5 +1,4 @@
 <?php
-session_start();
 include("conexao.php");
 
 $email  = trim($_POST['email'] ?? '');

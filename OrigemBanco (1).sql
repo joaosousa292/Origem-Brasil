@@ -1,9 +1,8 @@
 -- =============================================
 -- Origem Brasil — Banco de Dados (arquivo único)
 -- =============================================
--- Este arquivo substitui: OrigemBanco.sql + migracao_produtor.sql +
--- migracao_produtor_v2.sql. Todas as colunas que antes eram criadas
--- via UPDATE/ALTER já nascem certas nos CREATE TABLE/INSERT abaixo
+-- Script unico de instalacao do banco.
+-- Todas as colunas necessarias ja nascem certas nos CREATE TABLE/INSERT abaixo
 -- (categoria já como ENUM, imagens já com subpasta, senha do admin
 -- já com o hash final, produtores/solicitacoes já com usuario_id).
 -- Para recriar o banco do zero, basta rodar:
@@ -158,11 +157,13 @@ CREATE TABLE IF NOT EXISTS favoritos (
 -- =============================================
 -- Usuário admin padrão  (senha: admin123)
 -- =============================================
-INSERT IGNORE INTO usuarios (nome, email, senha, tipo) VALUES
+INSERT INTO usuarios (nome, email, senha, tipo) VALUES
 ('Administrador', 'admin@origembrasil.com',
- '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uHwHWn36G', 'admin');
--- Hash já atualizado (equivalente ao 2º UPDATE que existia no arquivo antigo)
-
+ '$2y$10$jSLbNdPGh0cI8wi4wyvgr.dcGPxlHwLspP4WIsaeDq8O9L6i70Bse', 'admin')
+ON DUPLICATE KEY UPDATE
+    nome = VALUES(nome),
+    senha = VALUES(senha),
+    tipo = VALUES(tipo);
 -- =============================================
 -- Produtores de exemplo
 -- =============================================
