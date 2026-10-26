@@ -77,12 +77,68 @@ async function removeFromCart(produto_id) {
     showToast('Item removido', 'info');
 }
 
-async function changeQty(produto_id, delta, qty_atual) {
-    const nova = qty_atual + delta;
-    if (nova <= 0) { await removeFromCart(produto_id); return; }
-    const data = await apiPost('atualizar', { produto_id, quantidade:nova });
-    if (data?.erro === 'sem_estoque') { showToast('Quantidade máxima disponível atingida', 'warning'); }
-    await renderCart();
+async function changeQty(produto_id, delta) {
+    const itemEl = document.querySelector(`.cart-item[data-produto-id="${produto_id}"]`);
+    if (!itemEl) return;
+
+    const botoes = itemEl.querySelectorAll('.qty-btn');
+    if ([...botoes].some(btn => btn.disabled)) return;
+
+    const qtyEl = itemEl.querySelector('.qty-num');
+    const quantidadeAtual = parseInt(qtyEl?.textContent, 10);
+    const nova = quantidadeAtual + delta;
+    botoes.forEach(btn => { btn.disabled = true; });
+
+    if (nova <= 0) {
+        try {
+            const data = await apiPost('remover', { produto_id });
+            if (data?.ok) {
+                itemEl.remove();
+                updateCartSummary();
+                showToast('Item removido', 'info');
+                if (!document.querySelector('.cart-item')) await renderCart();
+            }
+        } finally {
+            botoes.forEach(btn => { btn.disabled = false; });
+        }
+        return;
+    }
+
+    try {
+        const data = await apiPost('atualizar', { produto_id, quantidade:nova });
+        if (data?.erro === 'sem_estoque') {
+            showToast('Quantidade máxima disponível atingida', 'warning');
+            return;
+        }
+        if (!data || data.erro) return;
+
+        qtyEl.textContent = nova;
+        itemEl.querySelector('.cart-item-price').textContent = `R$ ${fmtBRL(itemEl.dataset.preco)} × ${nova}`;
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && qtyEl.animate) {
+            qtyEl.animate([{ transform:'scale(.94)' }, { transform:'scale(1)' }], { duration:160, easing:'ease-out' });
+        }
+
+        updateCartSummary();
+    } finally {
+        botoes.forEach(btn => { btn.disabled = false; });
+    }
+}
+
+function updateCartSummary() {
+    let total = 0;
+    let quantidadeTotal = 0;
+    document.querySelectorAll('.cart-item').forEach(item => {
+        const quantidade = parseInt(item.querySelector('.qty-num')?.textContent, 10) || 0;
+        total += Number(item.dataset.preco) * quantidade;
+        quantidadeTotal += quantidade;
+    });
+    const totalEl = document.getElementById('cart-total');
+    if (totalEl) totalEl.innerHTML = `Total <span>R$ ${fmtBRL(total)}</span>`;
+    const totalVal = document.getElementById('cart-total-val');
+    if (totalVal) totalVal.textContent = `R$ ${fmtBRL(total)}`;
+    const countLabel = document.getElementById('cart-count-label');
+    if (countLabel) countLabel.textContent = `${quantidadeTotal} ${quantidadeTotal === 1 ? 'item' : 'itens'}`;
+    updateCartCount(quantidadeTotal);
 }
 
 async function renderCart() {
@@ -130,15 +186,15 @@ async function renderCart() {
         const sub = item.preco * item.quantidade;
         total += sub;
         const img = item.imagem || 'imagens/cafe1.jpg';
-        return `<div class="cart-item">
+        return `<div class="cart-item" data-produto-id="${item.produto_id}" data-preco="${Number(item.preco)}">
             <img src="${img}" alt="${item.nome}" class="cart-item-img" onerror="this.src='imagens/cafe/cafe1.jpg'">
             <div class="cart-item-info">
                 <div class="cart-item-name">${item.nome}</div>
                 <div class="cart-item-price">R$ ${fmtBRL(item.preco)} × ${item.quantidade}</div>
                 <div class="cart-controls">
-                    <button class="qty-btn" onclick="changeQty(${item.produto_id},-1,${item.quantidade})">−</button>
+                    <button class="qty-btn" onclick="changeQty(${item.produto_id},-1)">−</button>
                     <span class="qty-num">${item.quantidade}</span>
-                    <button class="qty-btn" onclick="changeQty(${item.produto_id},1,${item.quantidade})">+</button>
+                    <button class="qty-btn" onclick="changeQty(${item.produto_id},1)">+</button>
                     <button class="remove-btn" onclick="removeFromCart(${item.produto_id})" title="Remover">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
                     </button>
